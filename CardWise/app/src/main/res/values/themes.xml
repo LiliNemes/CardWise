@@ -8,6 +8,8 @@
 
     <style name="Theme.CardWise" parent="Base.Theme.CardWise" >
         <item name="android:statusBarColor">@color/darker_grey</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.CardWise.Starting" parent="Theme.SplashScreen">
