@@ -24,4 +24,6 @@
     <string name="description">Description</string>
     <string name="button_ok">Ok</string>
     <string name="button_cancel">Cancel</string>
+    <string name="deck_list_title">Decks</string>
+
 </resources>

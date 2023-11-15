@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/decksFragment"
-        android:name="hu.bme.aut.android.cardwise.DecksFragment"
+        android:name="hu.bme.aut.android.cardwise.fragments.DecksFragment"
         android:label="fragment_decks"
         tools:layout="@layout/fragment_decks" />
     <fragment

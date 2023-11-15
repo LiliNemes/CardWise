@@ -6,14 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [Deck::class], version = 1)
-abstract class DeckDatabase:RoomDatabase() {
+abstract class AppDatabase:RoomDatabase() {
     abstract fun DeckDao(): DeckDao
 
     companion object {
-        fun getDatabase(applicationContext: Context): DeckDatabase {
+        fun getDatabase(applicationContext: Context): AppDatabase {
             return Room.databaseBuilder(
                 applicationContext,
-                DeckDatabase::class.java,
+                AppDatabase::class.java,
                 "deck-list"
             ).build();
         }

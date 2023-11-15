@@ -1,5 +1,6 @@
-package hu.bme.aut.android.cardwise
+package hu.bme.aut.android.cardwise.fragments
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,20 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.bme.aut.android.cardwise.DataRepositoryProvider
 import hu.bme.aut.android.cardwise.adapter.DeckAdapter
 import hu.bme.aut.android.cardwise.data.Deck
-import hu.bme.aut.android.cardwise.data.DeckDatabase
+import hu.bme.aut.android.cardwise.data.DataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentDecksBinding
-import hu.bme.aut.android.cardwise.fragments.NewDeckDialogFragment
 import kotlin.concurrent.thread
 
 class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFragment.NewDeckDialogListener {
+
     private lateinit var binding: FragmentDecksBinding
 
+    private lateinit var dataRepository: DataRepository
+    private lateinit var adapter: DeckAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dataRepository = (context as? DataRepositoryProvider)?.getDataRepository()
+            ?: throw RuntimeException("Activity must implement the DataRepositoryProvider interface!")
     }
 
     override fun onCreateView(
@@ -36,14 +41,12 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
         super.onViewCreated(view, savedInstanceState)
 
         binding.fab.setOnClickListener {
-            NewDeckDialogFragment().show(
+            NewDeckDialogFragment(this).show(
                 activity?.supportFragmentManager!!,
                 NewDeckDialogFragment.TAG
             )
         }
-
         initRecyclerView()
-
     }
 
     private fun initRecyclerView() {
@@ -55,26 +58,46 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
 
     private fun loadItemsInBackground() {
         thread {
-            val items = database.DeckDao().getAll()
+            val items = dataRepository.getAllDecks()
             activity?.runOnUiThread {
-                adapter.update(items)
+                adapter.setAllItem(items)
             }
         }
     }
 
-    override fun onItemChanged(item: Deck) {
-        thread {
-            database.DeckDao().update(item)
-            Log.d("DecksFragment", "Deck update was successful")
-        }
+    override fun onDeckStarted(item: Deck) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDeckDeleted(item: Deck) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder
+            .setMessage("Do you really want to delete deck ${item.name} ?")
+            .setTitle("Delete deck")
+            .setPositiveButton("Yes") { _, _ ->
+                thread {
+                    dataRepository.deleteDeck(item)
+                    activity?.runOnUiThread {
+                        adapter.deleteItem(item)
+                    }
+                }
+            }
+            .setNegativeButton("No", null)
+
+        builder.create().show()
+    }
+
+    override fun onDeckEdited(item: Deck) {
+        TODO("Not yet implemented")
     }
 
     override fun onDeckCreated(newItem: Deck) {
         thread {
-            val insertId = database.DeckDao().insert(newItem)
+            val insertId = dataRepository.insertDeck(newItem)
             newItem.id = insertId
             activity?.runOnUiThread {
                 adapter.addItem(newItem)
+            Log.d("DeckCreated", "Deck with id $insertId created")
             }
         }
     }
