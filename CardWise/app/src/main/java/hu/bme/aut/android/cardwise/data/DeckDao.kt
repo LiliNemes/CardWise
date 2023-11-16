@@ -19,4 +19,7 @@ interface DeckDao {
 
     @Delete
     fun deleteItem(deck: Deck)
+
+    @Query("SELECT * FROM Deck WHERE id=:deckId")
+    fun getById(deckId: Long): Deck
 }

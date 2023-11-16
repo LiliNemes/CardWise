@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.cardwise.DataRepositoryProvider
+import hu.bme.aut.android.cardwise.R
 import hu.bme.aut.android.cardwise.adapter.DeckAdapter
 import hu.bme.aut.android.cardwise.data.Deck
 import hu.bme.aut.android.cardwise.data.DataRepository
@@ -79,6 +81,7 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
                     dataRepository.deleteDeck(item)
                     activity?.runOnUiThread {
                         adapter.deleteItem(item)
+                        Log.d("DeckDeleted", "Deck with id ${item.id} deleted")
                     }
                 }
             }
@@ -88,7 +91,9 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
     }
 
     override fun onDeckEdited(item: Deck) {
-        TODO("Not yet implemented")
+        var bundle = Bundle()
+        bundle.putLong("deckId", item.id!!)
+        findNavController().navigate(R.id.action_decksFragment_to_cardsFragment, bundle)
     }
 
     override fun onDeckCreated(newItem: Deck) {

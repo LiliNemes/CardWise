@@ -21,7 +21,11 @@
         android:id="@+id/decksFragment"
         android:name="hu.bme.aut.android.cardwise.fragments.DecksFragment"
         android:label="fragment_decks"
-        tools:layout="@layout/fragment_decks" />
+        tools:layout="@layout/fragment_decks" >
+        <action
+            android:id="@+id/action_decksFragment_to_cardsFragment"
+            app:destination="@id/cardsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/statsFragment"
         android:name="hu.bme.aut.android.cardwise.StatsFragment"
@@ -35,5 +39,14 @@
         <action
             android:id="@+id/action_loginFragment3_to_menuFragment"
             app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardsFragment"
+        android:name="hu.bme.aut.android.cardwise.fragments.CardsFragment"
+        android:label="fragment_cards"
+        tools:layout="@layout/fragment_cards" >
+        <argument
+            android:name="deckId"
+            app:argType="long" />
     </fragment>
 </navigation>

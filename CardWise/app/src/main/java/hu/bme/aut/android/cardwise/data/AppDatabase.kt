@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Deck::class], version = 1)
+@Database(entities = [Deck::class, Card::class], version = 2)
 abstract class AppDatabase:RoomDatabase() {
     abstract fun DeckDao(): DeckDao
+    abstract fun CardDao(): CardDao
 
     companion object {
         fun getDatabase(applicationContext: Context): AppDatabase {
@@ -15,7 +16,7 @@ abstract class AppDatabase:RoomDatabase() {
                 applicationContext,
                 AppDatabase::class.java,
                 "deck-list"
-            ).build();
+            ).fallbackToDestructiveMigration().build();
         }
     }
 }
