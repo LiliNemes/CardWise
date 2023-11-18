@@ -18,6 +18,7 @@ import hu.bme.aut.android.cardwise.data.DataRepository
 import hu.bme.aut.android.cardwise.data.Deck
 import hu.bme.aut.android.cardwise.databinding.FragmentCardsBinding
 import hu.bme.aut.android.cardwise.databinding.FragmentDecksBinding
+import hu.bme.aut.android.cardwise.fragments.DecksFragment.Companion.DECK_ID_TAG
 import kotlin.concurrent.thread
 
 class CardsFragment : Fragment(), CardAdapter.CardClickListener,
@@ -37,7 +38,7 @@ class CardsFragment : Fragment(), CardAdapter.CardClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        deckId = arguments?.getLong("deckId")
+        deckId = arguments?.getLong(DECK_ID_TAG)
     }
 
     override fun onCreateView(

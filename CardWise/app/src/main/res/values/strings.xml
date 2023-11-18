@@ -29,5 +29,6 @@
     <string name="card_answer">Answer:</string>
     <string name="new_card_title">New Card</string>
     <string name="edit_card_title">Edit Card</string>
+    <string name="title_activity_study">StudyActivity</string>
 
 </resources>

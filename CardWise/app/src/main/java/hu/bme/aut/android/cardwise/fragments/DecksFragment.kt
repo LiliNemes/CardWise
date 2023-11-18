@@ -2,6 +2,7 @@ package hu.bme.aut.android.cardwise.fragments
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.cardwise.DataRepositoryProvider
 import hu.bme.aut.android.cardwise.R
+import hu.bme.aut.android.cardwise.StudyActivity
 import hu.bme.aut.android.cardwise.adapter.DeckAdapter
 import hu.bme.aut.android.cardwise.data.Deck
 import hu.bme.aut.android.cardwise.data.DataRepository
@@ -68,7 +70,9 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
     }
 
     override fun onDeckStarted(item: Deck) {
-        TODO("Not yet implemented")
+        val intent = Intent(requireContext(), StudyActivity::class.java)
+        intent.putExtra(StudyActivity.STUDY_DECK_ID_TAG, item.id!!)
+        startActivity(intent)
     }
 
     override fun onDeckDeleted(item: Deck) {
@@ -92,7 +96,7 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
 
     override fun onDeckEdited(item: Deck) {
         var bundle = Bundle()
-        bundle.putLong("deckId", item.id!!)
+        bundle.putLong(DECK_ID_TAG, item.id!!)
         findNavController().navigate(R.id.action_decksFragment_to_cardsFragment, bundle)
     }
 
@@ -106,4 +110,9 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
             }
         }
     }
+
+    companion object {
+        const val DECK_ID_TAG = "deckId"
+    }
+
 }

@@ -13,9 +13,19 @@
         android:theme="@style/Theme.CardWise"
         tools:targetApi="31">
         <activity
-            android:theme ="@style/Theme.CardWise.Starting"
+            android:name=".StudyActivity"
+            android:exported="false"
+            android:label="@string/title_activity_study"
+            android:theme="@style/Theme.CardWise" />
+        <activity
+            android:name=".CheckActivity"
+            android:exported="false"
+            android:label="CheckActivity"
+            android:theme="@style/Theme.CardWise" />
+        <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.CardWise.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,8 +34,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

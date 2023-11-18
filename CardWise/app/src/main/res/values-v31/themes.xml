@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.CardWise.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ic_cardwise_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_cardwise_foreground</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.CardWise</item>
+    </style>
+</resources>

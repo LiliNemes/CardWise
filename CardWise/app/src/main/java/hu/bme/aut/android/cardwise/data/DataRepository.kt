@@ -25,6 +25,10 @@ class DataRepository(applicationContext: Context) {
         return database.DeckDao().getAll()
     }
 
+    fun getLastDeckUsed(): Deck {
+        return database.DeckDao().getAll().first()
+    }
+
     fun insertDeck(item :Deck): Long {
         return database.DeckDao().insert(item)
     }
