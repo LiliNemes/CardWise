@@ -3,30 +3,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".MenuFragment"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="40dp"
+        android:layout_marginBottom="60dp"
         android:text="@string/welcome_back" />
+
     <Button
         android:id="@+id/btnDecks"
-        android:layout_width="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_width="160sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/my_decks" />
+
     <Button
         android:id="@+id/btnstats"
-        android:layout_width="wrap_content"
+        android:layout_width="160sp"
+        android:layout_margin="5dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/my_stats" />
+
     <Button
         android:id="@+id/btnCheckLast"
-        android:layout_width="wrap_content"
+        android:layout_width="160sp"
+        android:layout_margin="5dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Check knowledge" />
+        android:text="Run last test" />
 
 </LinearLayout>

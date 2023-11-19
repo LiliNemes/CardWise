@@ -2,14 +2,17 @@ package hu.bme.aut.android.cardwise
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import hu.bme.aut.android.cardwise.data.DataRepository
 import hu.bme.aut.android.cardwise.databinding.ActivityCheckBinding
 import hu.bme.aut.android.cardwise.logic.CheckRun
 import kotlin.concurrent.thread
+
 
 class CheckActivity : AppCompatActivity() {
 
@@ -28,11 +31,6 @@ class CheckActivity : AppCompatActivity() {
 
         binding = ActivityCheckBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val deckId = this.intent.getLongExtra(CHECK_DECK_ID_TAG, -1)
-        checkRun = CheckRun(dataRepository, deckId)
-
-        setTitle()
 
         var scale = applicationContext.resources.displayMetrics.density
 
@@ -54,24 +52,49 @@ class CheckActivity : AppCompatActivity() {
             askQuestion()
         }
 
+        binding.btnExit.setOnClickListener {
+            super.onBackPressed()
+        }
+
         binding.etAnswer.setOnKeyListener ( View.OnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 showAnswer(binding.etAnswer.text.toString())
-                true
+                return@OnKeyListener true
             }
-            false
+            return@OnKeyListener false
         })
 
-        askQuestion()
+        val deckId = this.intent.getLongExtra(CHECK_DECK_ID_TAG, -1)
+        initializeCheckRun(deckId)
     }
 
-    private fun setTitle() {
+    private fun initializeCheckRun(deckId :Long)
+    {
         thread {
-            val deckName = checkRun.getDeckName()
+            checkRun = CheckRun(dataRepository, deckId)
             runOnUiThread {
-                binding.toolbarTitle.text = "Deck: $deckName"
+                setTitle()
+                askQuestion()
             }
         }
+    }
+
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setMessage("Are you sure you want to stop ?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, id ->
+                super.onBackPressed()
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+
+    private fun setTitle() {
+        val deckName = this.checkRun.getDeckName()
+        binding.toolbarTitle.text = "Deck: $deckName"
     }
 
     private fun askQuestion() {
@@ -79,7 +102,6 @@ class CheckActivity : AppCompatActivity() {
             var card = checkRun.getNextCard()
             runOnUiThread {
                 binding.checkQuestion.text = card.question
-                binding.rightAnswer.text = card.answer
                 binding.etAnswer.text.clear()
                 if (!isFront) flipCard()
             }
@@ -90,6 +112,7 @@ class CheckActivity : AppCompatActivity() {
         thread {
             var success = checkRun.userAnswered(userAnswer)
             runOnUiThread {
+                binding.rightAnswer.text = checkRun.getCurrentCard().answer
                 binding.imgFailure.visibility = if (success) View.GONE else View.VISIBLE
                 binding.imgSuccess.visibility = if (success) View.VISIBLE else View.GONE
                 binding.totalCount.text = checkRun.total.toString()

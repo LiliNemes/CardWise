@@ -11,13 +11,21 @@ class DataRepository(applicationContext: Context) {
         thread {
             database.clearAllTables()
             val deckId1 = database.DeckDao().insert(Deck(null, "Deck1", "This is deck one"))
-            database.CardDao().insert(Card(null, deckId1, "Question1", "Answer1"))
-            database.CardDao().insert(Card(null, deckId1,
+            database.CardDao().insert(Card(null, deckId1, "1+1", "2"))
+            database.CardDao().insert(Card(null, deckId1,"First letter of alphabet","a"))
+            database.CardDao().insert(Card(null, deckId1, "2+2", "4"))
+            database.CardDao().insert(Card(null, deckId1, "3*2", "6"))
+            database.CardDao().insert(Card(null, deckId1, "5-5", "0"))
+
+            val deckId2 = database.DeckDao().insert(Deck(null, "Deck2", "This is deck two"))
+            database.CardDao().insert(Card(null, deckId2, "Question1", "Answer1"))
+            database.CardDao().insert(Card(null, deckId2,
                 "This is a really long Question2 with a lot of stuff. Maybe multipe lines. Or even more."
                 , "And the matching answer is also very long. It might take multiple lines. yes this is it. 1234567890. Piggies for the win."))
-            val deckId2 = database.DeckDao().insert(Deck(null, "Deck2", "This is deck two"))
-            database.CardDao().insert(Card(null, deckId2, "QuestionA", "AnswerA"))
-            database.CardDao().insert(Card(null, deckId2, "QuestionB", "AnswerB"))
+
+            val deckId3 = database.DeckDao().insert(Deck(null, "Deck3", "This is deck three"))
+            database.CardDao().insert(Card(null, deckId3, "QuestionA", "AnswerA"))
+            database.CardDao().insert(Card(null, deckId3, "QuestionB", "AnswerB"))
         }
     }
 

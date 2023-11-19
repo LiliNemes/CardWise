@@ -3,13 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.StudyStatFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:textSize="30sp"
-        android:text="@string/hello_blank_fragment" />
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:text="Statistics" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chartDeckStat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </FrameLayout>
