@@ -2,8 +2,7 @@ package hu.bme.aut.android.cardwise.logic
 import hu.bme.aut.android.cardwise.data.Card
 import hu.bme.aut.android.cardwise.data.DataRepository
 import hu.bme.aut.android.cardwise.data.Deck
-import kotlinx.coroutines.delay
-import kotlin.concurrent.thread
+import java.util.Calendar
 
 class CheckRun {
 
@@ -38,9 +37,22 @@ class CheckRun {
     }
 
     fun userAnswered(userAnswer: String?): Boolean {
-        total++
+
         val success = userAnswer != null && userAnswer.equals(currentCard.answer, true)
-        if (success) this.success++
+
+        total++
+        currentCard.totalCount++
+
+        if (success) {
+            this.success++
+            currentCard.successCount++
+        }
+
+        dataRepository.updateCard(currentCard)
+
+        val calendar = Calendar.getInstance()
+        dataRepository.updateDailyStat(deckId, calendar.time, success)
+
         return success
     }
 

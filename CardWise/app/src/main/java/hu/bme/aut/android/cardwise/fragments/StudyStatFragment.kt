@@ -36,6 +36,11 @@ class StudyStatFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadStats()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,16 +51,23 @@ class StudyStatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadStats()
     }
 
     private fun loadStats() {
         thread {
-            val entries = listOf(
-                PieEntry(1f, "Taken"),
-                PieEntry(2f, "Remaining")
-            )
+            val stats = dataRepository.getDeckStat(deckId)
+            var entries = mutableListOf<PieEntry>()
+
+            if (stats.neverCount > 0)
+                entries.add(PieEntry(stats.neverCount.toFloat(), "Never"))
+            if (stats.under20 > 0)
+                entries.add(PieEntry(stats.under20.toFloat(), "< 20%"))
+            if (stats.under50above20 > 0)
+                entries.add(PieEntry(stats.under50above20.toFloat(), "20% - 50%"))
+            if (stats.under80above50 > 0)
+                entries.add(PieEntry(stats.under80above50.toFloat(), "50% - 80%"))
+            if (stats.above80 > 0)
+                entries.add(PieEntry(stats.above80.toFloat(), "> 80%"))
 
             val dataSet = PieDataSet(entries, "Statistics")
             dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
