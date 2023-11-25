@@ -12,6 +12,9 @@ interface DailyStatDao {
     @Query("SELECT * FROM DailyStat")
     fun getAll(): List<DailyStat>
 
+    @Query("SELECT * FROM DailyStat WHERE userId = :userId")
+    fun getAllForUser(userId: Long): List<DailyStat>
+
     @Query("SELECT * FROM DailyStat WHERE deckId = :deckId")
     fun getForDeck(deckId: Long): List<DailyStat>
 

@@ -34,6 +34,9 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
             this.supportFragmentManager,
             NewDeckDialogFragment.TAG)
         }
+
+        binding.etUsername.text.append("Hans")
+        binding.etPassword.text.append("Hans")
     }
 
     override fun onUserCreated(newUser: User) {
@@ -60,10 +63,26 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
     private fun CheckLogin(userName: String, password: String) {
         thread {
 
-            val user = database.UserDao().getByName(userName) ?: return@thread
+            val user = database.UserDao().getByName(userName);
+
+            if (user == null) {
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                        .setMessage("No such user.")
+                        .setPositiveButton("Ok", null)
+                        .show()
+                }
+                return@thread
+            }
 
             if (user.password != password) {
-                //TODO
+                runOnUiThread {
+                    AlertDialog.Builder(this)
+                        .setMessage("Invalid password.")
+                        .setPositiveButton("Ok", null)
+                        .show()
+                }
+                return@thread
             }
 
             runOnUiThread {

@@ -59,7 +59,7 @@ class UserDataRepository(applicationContext: Context, private val userId: Long) 
         val ds = database.DailyStatDao().get(deckId, time)
         if (ds == null)
         {
-            database.DailyStatDao().insert(DailyStat(deckId, time, 1, if (success) 1 else 0))
+            database.DailyStatDao().insert(DailyStat(deckId, userId, time, 1, if (success) 1 else 0))
         }
         else
         {
@@ -97,7 +97,7 @@ class UserDataRepository(applicationContext: Context, private val userId: Long) 
     }
 
     fun getDailyUsage(): List<LocalDate> {
-        return database.DailyStatDao().getAll()
+        return database.DailyStatDao().getAllForUser(userId)
             .map { it -> it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() }
             .distinct();
     }
