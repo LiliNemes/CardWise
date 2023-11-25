@@ -8,22 +8,24 @@ import androidx.fragment.app.DialogFragment
 import hu.bme.aut.android.cardwise.data.Deck
 import hu.bme.aut.android.cardwise.databinding.DialogNewDeckBinding
 import hu.bme.aut.android.cardwise.R
+import hu.bme.aut.android.cardwise.data.User
+import hu.bme.aut.android.cardwise.databinding.DialogNewUserBinding
 
-class NewDeckDialogFragment(private val listener: NewDeckDialogListener) :  DialogFragment() {
-    interface NewDeckDialogListener {
-        fun onDeckCreated(newItem: Deck)
+class NewUserDialogFragment(private val listener: NewUserDialogListener) :  DialogFragment() {
+    interface NewUserDialogListener {
+        fun onUserCreated(newUser: User)
     }
-    private lateinit var binding: DialogNewDeckBinding
+    private lateinit var binding: DialogNewUserBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogNewDeckBinding.inflate(LayoutInflater.from(activity))
+        binding = DialogNewUserBinding.inflate(LayoutInflater.from(activity))
 
         return AlertDialog.Builder(requireContext())
-            .setTitle(R.string.new_deck)
+            .setTitle("Register new user")
             .setView(binding.root)
             .setPositiveButton(R.string.button_ok) { _, _ ->
                 if (isValid()) {
-                    listener.onDeckCreated(getDeck())
+                    listener.onUserCreated(getUser())
                 }
             }
             .setNegativeButton(R.string.button_cancel, null)
@@ -31,14 +33,14 @@ class NewDeckDialogFragment(private val listener: NewDeckDialogListener) :  Dial
     }
 
     companion object {
-        const val TAG = "NewDeckDialogFragment"
+        const val TAG = "NewUserDialogFragment"
     }
 
-    private fun isValid() = binding.etName.text.isNotEmpty()
+    private fun isValid() = binding.etName.text.isNotEmpty() && binding.etPassword.text.isNotEmpty()
 
-    private fun getDeck() = Deck(
+    private fun getUser() = User(
         name = binding.etName.text.toString(),
-        userId = -1,
-        description = binding.etDescription.text.toString()
+        password = binding.etPassword.text.toString(),
+        lastDeckId = -1
     )
 }

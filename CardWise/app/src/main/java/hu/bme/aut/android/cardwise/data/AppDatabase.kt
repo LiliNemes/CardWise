@@ -6,12 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [Deck::class, Card::class, DailyStat::class], version = 3, exportSchema = false)
+@Database(entities = [Deck::class, Card::class, DailyStat::class, User::class], version = 4, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase:RoomDatabase() {
     abstract fun DeckDao(): DeckDao
     abstract fun CardDao(): CardDao
     abstract fun DailyStatDao(): DailyStatDao
+    abstract fun UserDao(): UserDao
 
     companion object {
         fun getDatabase(applicationContext: Context): AppDatabase {

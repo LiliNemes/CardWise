@@ -8,8 +8,8 @@ import androidx.room.Update
 
 @Dao
 interface DeckDao {
-    @Query("SELECT * FROM Deck")
-    fun getAll(): List<Deck>
+    @Query("SELECT * FROM Deck WHERE userId=:userId")
+    fun getAllForUser(userId: Long): List<Deck>
 
     @Insert
     fun insert(deck: Deck): Long

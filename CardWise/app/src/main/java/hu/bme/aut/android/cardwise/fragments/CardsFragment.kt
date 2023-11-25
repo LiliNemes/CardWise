@@ -9,22 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import hu.bme.aut.android.cardwise.DataRepositoryProvider
-import hu.bme.aut.android.cardwise.R
+import hu.bme.aut.android.cardwise.UserDataRepositoryProvider
 import hu.bme.aut.android.cardwise.adapter.CardAdapter
-import hu.bme.aut.android.cardwise.adapter.DeckAdapter
 import hu.bme.aut.android.cardwise.data.Card
-import hu.bme.aut.android.cardwise.data.DataRepository
-import hu.bme.aut.android.cardwise.data.Deck
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentCardsBinding
-import hu.bme.aut.android.cardwise.databinding.FragmentDecksBinding
 import hu.bme.aut.android.cardwise.fragments.DecksFragment.Companion.DECK_ID_TAG
 import kotlin.concurrent.thread
 
 class CardsFragment : Fragment(), CardAdapter.CardClickListener,
     EditCardDialogFragment.EditCardDialogListener {
 
-    private lateinit var dataRepository: DataRepository
+    private lateinit var userDataRepository: UserDataRepository
     private lateinit var adapter: CardAdapter
 
     private lateinit var binding: FragmentCardsBinding
@@ -32,7 +28,7 @@ class CardsFragment : Fragment(), CardAdapter.CardClickListener,
     private var deckId: Long? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        dataRepository = (context as? DataRepositoryProvider)?.getDataRepository()
+        userDataRepository = (context as? UserDataRepositoryProvider)?.getUserDataRepository()
             ?: throw RuntimeException("Activity must implement the DataRepositoryProvider interface!")
     }
 
@@ -72,8 +68,8 @@ class CardsFragment : Fragment(), CardAdapter.CardClickListener,
     private fun loadItemsInBackground() {
         thread {
             if (this.deckId != null) {
-                val items = dataRepository.getCardsForDeck(this.deckId!!)
-                val deck = dataRepository.getDeck(this.deckId!!)
+                val items = userDataRepository.getCardsForDeck(this.deckId!!)
+                val deck = userDataRepository.getDeck(this.deckId!!)
                 activity?.runOnUiThread {
                     binding.toolbarTitle.text = "Deck: ${deck.name}"
                     adapter.setAllItem(items)
@@ -84,7 +80,7 @@ class CardsFragment : Fragment(), CardAdapter.CardClickListener,
 
     override fun onCardCreated(newItem: Card) {
         thread {
-            val insertId = dataRepository.insertCard(newItem)
+            val insertId = userDataRepository.insertCard(newItem)
             newItem.id = insertId
             activity?.runOnUiThread {
                 adapter.addItem(newItem)
@@ -95,7 +91,7 @@ class CardsFragment : Fragment(), CardAdapter.CardClickListener,
 
     override fun onCardEdited(editedItem: Card) {
         thread {
-            dataRepository.updateCard(editedItem)
+            userDataRepository.updateCard(editedItem)
             activity?.runOnUiThread {
                 adapter.updateItem(editedItem)
                 Log.d("CardUpdated", "Card with id ${editedItem.id} for deck ${this.deckId} is updated")
@@ -110,7 +106,7 @@ class CardsFragment : Fragment(), CardAdapter.CardClickListener,
             .setTitle("Delete card")
             .setPositiveButton("Yes") { _, _ ->
                 thread {
-                    dataRepository.deleteCard(item)
+                    userDataRepository.deleteCard(item)
                     activity?.runOnUiThread {
                         adapter.deleteItem(item)
                         Log.d("CardDeleted", "Card with id ${item.id} deleted")

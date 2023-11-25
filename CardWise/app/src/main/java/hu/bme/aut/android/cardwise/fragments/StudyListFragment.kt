@@ -7,22 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import hu.bme.aut.android.cardwise.DataRepositoryProvider
+import hu.bme.aut.android.cardwise.UserDataRepositoryProvider
 import hu.bme.aut.android.cardwise.DeckIdProvider
-import hu.bme.aut.android.cardwise.R
-import hu.bme.aut.android.cardwise.adapter.DeckAdapter
 import hu.bme.aut.android.cardwise.adapter.StudyAdapter
-import hu.bme.aut.android.cardwise.data.DataRepository
-import hu.bme.aut.android.cardwise.databinding.FragmentDecksBinding
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentStudyListBinding
-import hu.bme.aut.android.cardwise.databinding.StudyListBinding
 import kotlin.concurrent.thread
 
 class StudyListFragment : Fragment() {
 
     private lateinit var binding: FragmentStudyListBinding
 
-    private lateinit var dataRepository: DataRepository
+    private lateinit var userDataRepository: UserDataRepository
     private lateinit var adapter: StudyAdapter
     private var deckId: Long = -1
 
@@ -34,7 +30,7 @@ class StudyListFragment : Fragment() {
         super.onAttach(context)
         deckId = (context as? DeckIdProvider)?.getSelectedDeckId()
             ?: throw RuntimeException("Activity must implement the DeckIdProvider interface!")
-        dataRepository = (context as? DataRepositoryProvider)?.getDataRepository()
+        userDataRepository = (context as? UserDataRepositoryProvider)?.getUserDataRepository()
             ?: throw RuntimeException("Activity must implement the DataRepositoryProvider interface!")
     }
 
@@ -61,7 +57,7 @@ class StudyListFragment : Fragment() {
 
     private fun loadItemsInBackground() {
         thread {
-            val items = dataRepository.getCardsForDeck(this.deckId!!)
+            val items = userDataRepository.getCardsForDeck(this.deckId!!)
             activity?.runOnUiThread {
                 adapter.setAllItem(items)
             }

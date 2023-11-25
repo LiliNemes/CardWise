@@ -2,13 +2,12 @@ package hu.bme.aut.android.cardwise
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import hu.bme.aut.android.cardwise.data.DataRepository
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.ActivityCheckBinding
 import hu.bme.aut.android.cardwise.logic.CheckRun
 import kotlin.concurrent.thread
@@ -17,7 +16,7 @@ import kotlin.concurrent.thread
 class CheckActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCheckBinding
-    private lateinit var dataRepository: DataRepository
+    private lateinit var userDataRepository: UserDataRepository
     private lateinit var checkRun: CheckRun
     private lateinit var frontAnimator: AnimatorSet
     private lateinit var backAnimator: AnimatorSet
@@ -27,7 +26,8 @@ class CheckActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dataRepository = DataRepository(this)
+        val userId = this.intent.getLongExtra(USER_ID_TAG, -1)
+        userDataRepository = UserDataRepository(this, userId)
 
         binding = ActivityCheckBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -71,7 +71,7 @@ class CheckActivity : AppCompatActivity() {
     private fun initializeCheckRun(deckId :Long)
     {
         thread {
-            checkRun = CheckRun(dataRepository, deckId)
+            checkRun = CheckRun(userDataRepository, deckId)
             runOnUiThread {
                 setTitle()
                 askQuestion()
@@ -146,6 +146,7 @@ class CheckActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val USER_ID_TAG = "UserId"
         const val CHECK_DECK_ID_TAG = "CheckDeckId"
     }
 }

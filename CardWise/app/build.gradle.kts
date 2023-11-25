@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "hu.bme.aut.android.cardwise"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "hu.bme.aut.android.cardwise"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -59,4 +59,5 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.kizitonwose.calendar:view:2.4.0")
 }

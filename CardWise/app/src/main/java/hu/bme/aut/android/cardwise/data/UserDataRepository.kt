@@ -1,44 +1,33 @@
 package hu.bme.aut.android.cardwise.data
 
 import android.content.Context
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import kotlin.concurrent.thread
 
-class DataRepository(applicationContext: Context) {
+class UserDataRepository(applicationContext: Context, private val userId: Long) {
 
     private val database: AppDatabase = AppDatabase.getDatabase(applicationContext)
 
-    fun createTestData() {
-        thread {
-            database.clearAllTables()
-            val deckId1 = database.DeckDao().insert(Deck(null, "Deck1", "This is deck one"))
-            database.CardDao().insert(Card(null, deckId1, "1+1", "2"))
-            database.CardDao().insert(Card(null, deckId1,"First letter of alphabet","a"))
-            database.CardDao().insert(Card(null, deckId1, "2+2", "4"))
-            database.CardDao().insert(Card(null, deckId1, "3*2", "6"))
-            database.CardDao().insert(Card(null, deckId1, "5-5", "0"))
-
-            val deckId2 = database.DeckDao().insert(Deck(null, "Deck2", "This is deck two"))
-            database.CardDao().insert(Card(null, deckId2, "Question1", "Answer1"))
-            database.CardDao().insert(Card(null, deckId2,
-                "This is a really long Question2 with a lot of stuff. Maybe multipe lines. Or even more."
-                , "And the matching answer is also very long. It might take multiple lines. yes this is it. 1234567890. Piggies for the win."))
-
-            val deckId3 = database.DeckDao().insert(Deck(null, "Deck3", "This is deck three"))
-            database.CardDao().insert(Card(null, deckId3, "QuestionA", "AnswerA"))
-            database.CardDao().insert(Card(null, deckId3, "QuestionB", "AnswerB"))
-        }
-    }
-
     fun getAllDecks(): List<Deck> {
-        return database.DeckDao().getAll()
+        return database.DeckDao().getAllForUser(userId)
     }
 
-    fun getLastDeckUsed(): Deck {
-        return database.DeckDao().getAll().first()
+    fun setLastDeckUsed(item: Deck) {
+        val user = database.UserDao().getById(userId)
+        user.lastDeckId = item.id!!
+        database.UserDao().update(user)
+    }
+
+    fun getLastDeckUsed(): Deck? {
+        val user = database.UserDao().getById(userId)
+        if (user.lastDeckId < 0) return null
+        return database.DeckDao().getById(user.lastDeckId)
     }
 
     fun insertDeck(item :Deck): Long {
+        item.userId = userId
         return database.DeckDao().insert(item)
     }
 
@@ -105,5 +94,15 @@ class DataRepository(applicationContext: Context) {
         }
 
         return DeckStat(deckId, neverCount, under20, under50above20, under80above50, above80)
+    }
+
+    fun getDailyUsage(): List<LocalDate> {
+        return database.DailyStatDao().getAll()
+            .map { it -> it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() }
+            .distinct();
+    }
+
+    fun getUserId(): Long {
+        return userId
     }
 }

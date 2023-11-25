@@ -1,21 +1,21 @@
 package hu.bme.aut.android.cardwise.logic
 import hu.bme.aut.android.cardwise.data.Card
-import hu.bme.aut.android.cardwise.data.DataRepository
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.data.Deck
 import java.util.Calendar
 
 class CheckRun {
 
-    private val dataRepository: DataRepository
+    private val userDataRepository: UserDataRepository
     private val deckId: Long
     private val cards: List<Card>
     private val deck: Deck
 
-    constructor(dataRepository: DataRepository, deckId: Long) {
-        this.dataRepository = dataRepository
+    constructor(userDataRepository: UserDataRepository, deckId: Long) {
+        this.userDataRepository = userDataRepository
         this.deckId = deckId
-        this.cards = dataRepository.getCardsForDeck(deckId)
-        this.deck = dataRepository.getDeck(deckId)
+        this.cards = userDataRepository.getCardsForDeck(deckId)
+        this.deck = userDataRepository.getDeck(deckId)
     }
 
     private lateinit var currentCard: Card
@@ -48,10 +48,10 @@ class CheckRun {
             currentCard.successCount++
         }
 
-        dataRepository.updateCard(currentCard)
+        userDataRepository.updateCard(currentCard)
 
         val calendar = Calendar.getInstance()
-        dataRepository.updateDailyStat(deckId, calendar.time, success)
+        userDataRepository.updateDailyStat(deckId, calendar.time, success)
 
         return success
     }

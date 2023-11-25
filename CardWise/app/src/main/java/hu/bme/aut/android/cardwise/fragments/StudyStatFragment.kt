@@ -10,25 +10,23 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
-import hu.bme.aut.android.cardwise.DataRepositoryProvider
+import hu.bme.aut.android.cardwise.UserDataRepositoryProvider
 import hu.bme.aut.android.cardwise.DeckIdProvider
-import hu.bme.aut.android.cardwise.R
-import hu.bme.aut.android.cardwise.data.DataRepository
-import hu.bme.aut.android.cardwise.databinding.FragmentStudyListBinding
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentStudyStatBinding
 import kotlin.concurrent.thread
 
 class StudyStatFragment : Fragment() {
 
     private lateinit var binding: FragmentStudyStatBinding
-    private lateinit var dataRepository: DataRepository
+    private lateinit var userDataRepository: UserDataRepository
     private var deckId: Long = -1
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         deckId = (context as? DeckIdProvider)?.getSelectedDeckId()
             ?: throw RuntimeException("Activity must implement the DeckIdProvider interface!")
-        dataRepository = (context as? DataRepositoryProvider)?.getDataRepository()
+        userDataRepository = (context as? UserDataRepositoryProvider)?.getUserDataRepository()
             ?: throw RuntimeException("Activity must implement the DataRepositoryProvider interface!")
     }
 
@@ -55,7 +53,7 @@ class StudyStatFragment : Fragment() {
 
     private fun loadStats() {
         thread {
-            val stats = dataRepository.getDeckStat(deckId)
+            val stats = userDataRepository.getDeckStat(deckId)
             var entries = mutableListOf<PieEntry>()
 
             if (stats.neverCount > 0)

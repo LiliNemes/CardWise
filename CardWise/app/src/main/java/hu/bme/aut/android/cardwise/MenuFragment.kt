@@ -8,17 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import hu.bme.aut.android.cardwise.data.DataRepository
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentMenuBinding
 import kotlin.concurrent.thread
 
 class MenuFragment : Fragment() {
     private lateinit var binding : FragmentMenuBinding
-    private lateinit var dataRepository: DataRepository
+    private lateinit var userDataRepository: UserDataRepository
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        dataRepository = (context as? DataRepositoryProvider)?.getDataRepository()
+        userDataRepository = (context as? UserDataRepositoryProvider)?.getUserDataRepository()
             ?: throw RuntimeException("Activity must implement the DataRepositoryProvider interface!")
     }
 
@@ -43,10 +43,13 @@ class MenuFragment : Fragment() {
         binding.btnCheckLast.setOnClickListener {
             thread {
                 val intent = Intent(requireContext(), CheckActivity::class.java)
-                val lastDeck = dataRepository.getLastDeckUsed()
-                intent.putExtra(CheckActivity.CHECK_DECK_ID_TAG, lastDeck.id)
-                activity?.runOnUiThread {
-                    startActivity(intent)
+                val lastDeck = userDataRepository.getLastDeckUsed()
+                if (lastDeck != null) {
+                    intent.putExtra(CheckActivity.USER_ID_TAG, userDataRepository.getUserId())
+                    intent.putExtra(CheckActivity.CHECK_DECK_ID_TAG, lastDeck.id)
+                    activity?.runOnUiThread {
+                        startActivity(intent)
+                    }
                 }
             }
         }

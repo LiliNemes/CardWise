@@ -11,12 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import hu.bme.aut.android.cardwise.DataRepositoryProvider
+import hu.bme.aut.android.cardwise.UserDataRepositoryProvider
 import hu.bme.aut.android.cardwise.R
 import hu.bme.aut.android.cardwise.StudyActivity
 import hu.bme.aut.android.cardwise.adapter.DeckAdapter
 import hu.bme.aut.android.cardwise.data.Deck
-import hu.bme.aut.android.cardwise.data.DataRepository
+import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentDecksBinding
 import kotlin.concurrent.thread
 
@@ -24,12 +24,12 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
 
     private lateinit var binding: FragmentDecksBinding
 
-    private lateinit var dataRepository: DataRepository
+    private lateinit var userDataRepository: UserDataRepository
     private lateinit var adapter: DeckAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        dataRepository = (context as? DataRepositoryProvider)?.getDataRepository()
+        userDataRepository = (context as? UserDataRepositoryProvider)?.getUserDataRepository()
             ?: throw RuntimeException("Activity must implement the DataRepositoryProvider interface!")
     }
 
@@ -62,7 +62,7 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
 
     private fun loadItemsInBackground() {
         thread {
-            val items = dataRepository.getAllDecks()
+            val items = userDataRepository.getAllDecks()
             activity?.runOnUiThread {
                 adapter.setAllItem(items)
             }
@@ -71,6 +71,7 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
 
     override fun onDeckStarted(item: Deck) {
         val intent = Intent(requireContext(), StudyActivity::class.java)
+        intent.putExtra(StudyActivity.STUDY_USER_ID_TAG, userDataRepository.getUserId())
         intent.putExtra(StudyActivity.STUDY_DECK_ID_TAG, item.id!!)
         startActivity(intent)
     }
@@ -82,7 +83,7 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
             .setTitle("Delete deck")
             .setPositiveButton("Yes") { _, _ ->
                 thread {
-                    dataRepository.deleteDeck(item)
+                    userDataRepository.deleteDeck(item)
                     activity?.runOnUiThread {
                         adapter.deleteItem(item)
                         Log.d("DeckDeleted", "Deck with id ${item.id} deleted")
@@ -102,7 +103,7 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
 
     override fun onDeckCreated(newItem: Deck) {
         thread {
-            val insertId = dataRepository.insertDeck(newItem)
+            val insertId = userDataRepository.insertDeck(newItem)
             newItem.id = insertId
             activity?.runOnUiThread {
                 adapter.addItem(newItem)

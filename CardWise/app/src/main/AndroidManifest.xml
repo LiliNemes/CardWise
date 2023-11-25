@@ -34,7 +34,14 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:label="MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CardWise" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:label="LoginActivity"
+            android:theme="@style/Theme.CardWise" />
     </application>
 
 </manifest>
