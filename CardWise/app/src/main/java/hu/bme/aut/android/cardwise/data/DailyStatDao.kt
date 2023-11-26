@@ -27,6 +27,9 @@ interface DailyStatDao {
     @Query("SELECT * FROM DailyStat WHERE strftime('%Y', date) = :year AND  ltrim(strftime('%m', date), '0') = :month")
     fun getForMonth(year: Int, month: Int): List<DailyStat>
 
+    @Query("SELECT userId, SUM(totalCount) as total, SUM(successCount) as success FROM DailyStat GROUP BY userId ORDER BY SUM(totalCount) DESC")
+    fun getAggregateUserStats(): List<UserStatsData>
+
     @Insert
     fun insert(dailyStat: DailyStat)
 

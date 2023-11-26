@@ -5,6 +5,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import kotlin.concurrent.thread
+import kotlin.math.roundToInt
 
 class UserDataRepository(applicationContext: Context, private val userId: Long) {
 
@@ -98,11 +99,30 @@ class UserDataRepository(applicationContext: Context, private val userId: Long) 
 
     fun getDailyUsage(): List<LocalDate> {
         return database.DailyStatDao().getAllForUser(userId)
-            .map { it -> it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() }
+            .map { it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() }
             .distinct();
     }
 
     fun getUserId(): Long {
         return userId
+    }
+
+    fun getUserTotalList(limit: Int): List<UserStatInfo> {
+        var list = database.DailyStatDao().getAggregateUserStats()
+        return list.mapIndexed { idx, it ->
+                val user = database.UserDao().getById(it.userId)
+                UserStatInfo(idx+1, user.name, it.total.toString())
+        }.take(limit)
+    }
+
+    fun getUserSuccessList(limit: Int): List<UserStatInfo> {
+        var list = database.DailyStatDao().getAggregateUserStats()
+        var sorted = list.sortedByDescending { it.success.toDouble()/it.total }.take(limit)
+
+        return sorted.mapIndexed { idx, it ->
+            val user = database.UserDao().getById(it.userId)
+            val pct = it.success.toDouble()/it.total * 100
+            UserStatInfo(idx+1, user.name, pct.roundToInt().toString() + " %")
+        }
     }
 }

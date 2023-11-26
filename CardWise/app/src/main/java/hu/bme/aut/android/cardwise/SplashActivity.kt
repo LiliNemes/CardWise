@@ -2,13 +2,18 @@ package hu.bme.aut.android.cardwise
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import hu.bme.aut.android.cardwise.data.AppDatabase
 import hu.bme.aut.android.cardwise.data.Card
+import hu.bme.aut.android.cardwise.data.DailyStat
 import hu.bme.aut.android.cardwise.data.Deck
 import hu.bme.aut.android.cardwise.data.User
+import java.sql.Date
+import java.time.LocalDate
 import kotlin.concurrent.thread
+import kotlin.random.Random
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,27 +35,73 @@ class SplashActivity : AppCompatActivity() {
         database.clearAllTables()
         val userHans = database.UserDao().insert(User(name = "Hans", password = "Hans"))
         val userOtto = database.UserDao().insert(User(name = "Otto", password = "Otto"))
-        createTestDataForUser(database, userHans)
+        val userGigi = database.UserDao().insert(User(name = "Gigi", password = "Gigi"))
+        val deckId1 = createDeckForUser(database, userHans, "Mathematics", mathQuestions)
+        val deckId2 = createDeckForUser(database, userHans, "Alphabet", alphabetQuestions)
+        val deckId3 = createDeckForUser(database, userOtto, "Mathematics", mathQuestions)
+        val deckId4 = createDeckForUser(database, userGigi, "Alphabet", alphabetQuestions)
+
+        createUsageDataForUserAndDeck(database, userHans, deckId1)
+        createUsageDataForUserAndDeck(database, userHans, deckId2)
+        createUsageDataForUserAndDeck(database, userOtto, deckId3)
+        createUsageDataForUserAndDeck(database, userGigi, deckId4)
     }
 
-    private fun createTestDataForUser(database: AppDatabase, userId: Long) {
-        val deckId1 = database.DeckDao().insert(Deck(null, userId,"Deck1", "This is deck one"))
-        database.CardDao().insert(Card(null, deckId1, "1+1", "2"))
-        database.CardDao().insert(Card(null, deckId1,"First letter of alphabet","a"))
-        database.CardDao().insert(Card(null, deckId1, "2+2", "4"))
-        database.CardDao().insert(Card(null, deckId1, "3*2", "6"))
-        database.CardDao().insert(Card(null, deckId1, "5-5", "0"))
+    private fun createDeckForUser(database: AppDatabase, userId: Long, deckName: String, questionSet: List<QNA>): Long {
 
-        val deckId2 = database.DeckDao().insert(Deck(null, userId, "Deck2", "This is deck two"))
-        database.CardDao().insert(Card(null, deckId2, "Question1", "Answer1"))
-        database.CardDao().insert(
-            Card(null, deckId2,
-            "This is a really long Question2 with a lot of stuff. Maybe multipe lines. Or even more."
-            , "And the matching answer is also very long. It might take multiple lines. yes this is it. 1234567890. Piggies for the win.")
-        )
-
-        val deckId3 = database.DeckDao().insert(Deck(null,userId, "Deck3", "This is deck three"))
-        database.CardDao().insert(Card(null, deckId3, "QuestionA", "AnswerA"))
-        database.CardDao().insert(Card(null, deckId3, "QuestionB", "AnswerB"))
+        val deckId = database.DeckDao().insert(Deck(null, userId,deckName, "This is $deckName"))
+        for (question in questionSet) {
+            database.CardDao().insert(Card(null, deckId, question.question, question.answer))
+        }
+        return deckId
     }
+
+    private fun createUsageDataForUserAndDeck(database: AppDatabase, userId: Long, deckId: Long) {
+        val start = LocalDate.now().minusDays(30)
+        for (i in 1..30) {
+            val runTestToday = Random.nextInt(0,10) < 7
+            var localDate = start.plusDays(i.toLong())
+            var date :Date = Date.valueOf(localDate.toString())
+            if (runTestToday) createUsageDataForUserForADeckAndDay(database, userId, deckId, date)
+        }
+    }
+
+    private fun createUsageDataForUserForADeckAndDay(database: AppDatabase, userId: Long, deckId: Long, date: Date) {
+
+        Log.d("TAG", date.toString())
+
+        val total = Random.nextLong(10, 20)
+        val cards = database.CardDao().getForDeck(deckId)
+        var totalSuccess = 0L
+
+        for (i in 1..total) {
+            val currentCardIdx = Random.nextInt(0, cards.size)
+            val success = Random.nextInt(0,10) < 6
+            var currentCard = cards[currentCardIdx]
+            currentCard.totalCount++
+            if (success) {
+                currentCard.successCount++
+                totalSuccess++
+            }
+            database.CardDao().update(currentCard)
+        }
+
+        database.DailyStatDao().insert(DailyStat(deckId, userId, date, total, totalSuccess))
+    }
+
+    private val mathQuestions = listOf(
+        QNA("How much is 1+1?", "2"),
+        QNA("How much is 2+2?", "4"),
+        QNA("How much is 7+2?", "9"),
+        QNA("How much is 3+2?", "5"),
+        QNA("How much is 5-5?", "0"),
+        QNA("How much is 2*3?", "6"))
+
+    private val alphabetQuestions = listOf(
+        QNA("First letter of alphabet?", "a"),
+        QNA("Second letter of english alphabet?", "b"),
+        QNA("Last letter of english alphabet?", "z"),
+        QNA("What follows x?", "y"))
+
+    data class QNA(val question: String, val answer: String)
 }
