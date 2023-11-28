@@ -38,7 +38,7 @@ class StudyActivity : AppCompatActivity(), UserDataRepositoryProvider, DeckIdPro
         }
 
         binding.btnSetDeadline.setOnClickListener {
-            val datePickFragment = DatePickerDialogFragment(this)
+            val datePickFragment = DatePickerDialogFragment()
             datePickFragment.show(supportFragmentManager, "datePicker")
         }
 
@@ -65,7 +65,7 @@ class StudyActivity : AppCompatActivity(), UserDataRepositoryProvider, DeckIdPro
     }
 
     override fun onDatePicked(date: Date) {
-        TODO("Not yet implemented")
+
     }
 
     companion object {

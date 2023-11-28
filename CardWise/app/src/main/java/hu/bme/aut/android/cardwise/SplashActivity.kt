@@ -2,7 +2,6 @@ package hu.bme.aut.android.cardwise
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import hu.bme.aut.android.cardwise.data.AppDatabase
@@ -15,6 +14,9 @@ import java.time.LocalDate
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
+/**
+    Activity responsible for calling the splash screen.
+ */
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -22,6 +24,9 @@ class SplashActivity : AppCompatActivity() {
         initApplication()
     }
 
+    /**
+     * Loads the premade dataset if wanted, starts the login activity.
+     */
     private fun initApplication() {
         thread {
             //prepareDatabase(AppDatabase.getDatabase(applicationContext))
@@ -31,6 +36,9 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initializing data for the demo run.
+     */
     private fun prepareDatabase(database: AppDatabase) {
         database.clearAllTables()
         val userHans = database.UserDao().insert(User(name = "Hans", password = "Hans"))
@@ -47,6 +55,16 @@ class SplashActivity : AppCompatActivity() {
         createUsageDataForUserAndDeck(database, userGigi, deckId4)
     }
 
+    /**
+        Create storage for a deck with the given name, with the given cards for the user whose id
+        was passed as a parameter. Creates storage for cards as well.
+        database: database in which the deck and card data has to be stored.
+        userId: the user whose decks and cards need storing.
+        deckName: the name of the new deck.
+        question set: the list of questions in the new deck.
+
+        return deckId: The id of the created deck, comes from the insertion of the deck into the database.
+     */
     private fun createDeckForUser(database: AppDatabase, userId: Long, deckName: String, questionSet: List<QNA>): Long {
 
         val deckId = database.DeckDao().insert(Deck(null, userId,deckName, "This is $deckName"))
@@ -56,19 +74,24 @@ class SplashActivity : AppCompatActivity() {
         return deckId
     }
 
+    /**
+     *  The users activity (randomly) in the last 30 days.
+     */
     private fun createUsageDataForUserAndDeck(database: AppDatabase, userId: Long, deckId: Long) {
         val start = LocalDate.now().minusDays(30)
         for (i in 1..30) {
             val runTestToday = Random.nextInt(0,10) < 7
-            var localDate = start.plusDays(i.toLong())
-            var date :Date = Date.valueOf(localDate.toString())
+            val localDate = start.plusDays(i.toLong())
+            val date :Date = Date.valueOf(localDate.toString())
             if (runTestToday) createUsageDataForUserForADeckAndDay(database, userId, deckId, date)
         }
     }
 
+    /**
+     *  The user randomly practices a random amount of cards with random rate of success on a day,
+     *  and refreshes the statistics of their daily activity.
+     */
     private fun createUsageDataForUserForADeckAndDay(database: AppDatabase, userId: Long, deckId: Long, date: Date) {
-
-        Log.d("TAG", date.toString())
 
         val total = Random.nextLong(10, 20)
         val cards = database.CardDao().getForDeck(deckId)
@@ -77,7 +100,7 @@ class SplashActivity : AppCompatActivity() {
         for (i in 1..total) {
             val currentCardIdx = Random.nextInt(0, cards.size)
             val success = Random.nextInt(0,10) < 6
-            var currentCard = cards[currentCardIdx]
+            val currentCard = cards[currentCardIdx]
             currentCard.totalCount++
             if (success) {
                 currentCard.successCount++
@@ -89,6 +112,9 @@ class SplashActivity : AppCompatActivity() {
         database.DailyStatDao().insert(DailyStat(deckId, userId, date, total, totalSuccess))
     }
 
+    /**
+     * Static list of cards.
+     */
     private val mathQuestions = listOf(
         QNA("How much is 1+1?", "2"),
         QNA("How much is 2+2?", "4"),
@@ -97,11 +123,17 @@ class SplashActivity : AppCompatActivity() {
         QNA("How much is 5-5?", "0"),
         QNA("How much is 2*3?", "6"))
 
+    /**
+     * Static list of cards.
+     */
     private val alphabetQuestions = listOf(
         QNA("First letter of alphabet?", "a"),
         QNA("Second letter of english alphabet?", "b"),
         QNA("Last letter of english alphabet?", "z"),
         QNA("What follows x?", "y"))
 
+    /**
+     * New data class which has two string attributes, named question and answer.
+     */
     data class QNA(val question: String, val answer: String)
 }

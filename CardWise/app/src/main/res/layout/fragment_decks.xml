@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightest_brown"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,13 +16,13 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorSecondary">
+            android:background="@color/medium_brown">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/toolbar_title"
-                android:textColor="?attr/colorOnSecondary"
+                android:textColor="@color/dark_brown"
                 android:gravity="center_vertical"
                 android:textSize="20sp"
                 android:text="@string/deck_list_title" />
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
+        android:backgroundTint="@color/yellow"
         app:srcCompat="@mipmap/ic_add_white_36dp" />
 
 

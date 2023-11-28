@@ -86,6 +86,7 @@ class StatCalendarFragment : Fragment() {
             container.textView.text = data.date.dayOfMonth.toString()
             if (datesUsed.contains(data.date)) {
                 container.textView.setBackgroundColor(Color.LTGRAY)
+
             }
         }
 

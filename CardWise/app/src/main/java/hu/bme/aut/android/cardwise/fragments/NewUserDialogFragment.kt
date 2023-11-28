@@ -5,8 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
-import hu.bme.aut.android.cardwise.data.Deck
-import hu.bme.aut.android.cardwise.databinding.DialogNewDeckBinding
 import hu.bme.aut.android.cardwise.R
 import hu.bme.aut.android.cardwise.data.User
 import hu.bme.aut.android.cardwise.databinding.DialogNewUserBinding
@@ -17,6 +15,9 @@ class NewUserDialogFragment(private val listener: NewUserDialogListener) :  Dial
     }
     private lateinit var binding: DialogNewUserBinding
 
+    /**
+     * Sets the event listeners.
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogNewUserBinding.inflate(LayoutInflater.from(activity))
 
@@ -36,8 +37,14 @@ class NewUserDialogFragment(private val listener: NewUserDialogListener) :  Dial
         const val TAG = "NewUserDialogFragment"
     }
 
+    /**
+     * It is only valid if you give both a username and a password.
+     */
     private fun isValid() = binding.etName.text.isNotEmpty() && binding.etPassword.text.isNotEmpty()
 
+    /**
+     * Sets the attributes of the user we want to create.
+     */
     private fun getUser() = User(
         name = binding.etName.text.toString(),
         password = binding.etPassword.text.toString(),

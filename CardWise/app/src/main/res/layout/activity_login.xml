@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/lighter_grey"
+    android:background="@color/lightest_brown"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/darker_grey"
+        android:backgroundTint="@color/dark_brown"
         android:text="@string/login" />
 
     <Button
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/darker_grey"
+        android:backgroundTint="@color/dark_brown"
         android:text="@string/register" />
 
 </LinearLayout>

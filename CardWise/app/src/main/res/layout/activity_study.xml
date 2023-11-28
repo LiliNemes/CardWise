@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightest_brown"
     tools:context=".StudyActivity">
 
     <LinearLayout
@@ -19,13 +20,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorSecondary">
+                android:background="@color/medium_brown">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/toolbar_title"
-                    android:textColor="?attr/colorOnSecondary"
+                    android:textColor="@color/dark_brown"
                     android:gravity="center_vertical"
                     android:textSize="20sp"
                     android:text="Single deck" />
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5sp"
+                android:backgroundTint="@color/dark_brown"
                 android:text="Start test" />
             <TextView
                 android:layout_width="wrap_content"
@@ -61,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/dark_brown"
                 android:text="Set Deadline" />
         </LinearLayout>
     </LinearLayout>

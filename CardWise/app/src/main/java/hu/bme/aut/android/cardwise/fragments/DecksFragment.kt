@@ -37,7 +37,6 @@ class DecksFragment : Fragment(), DeckAdapter.DeckClickListener, NewDeckDialogFr
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentDecksBinding.inflate(inflater, container, false)
         return binding.root;
     }

@@ -9,5 +9,4 @@ data class Deck(
     @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) var id: Long? = null,
     @ColumnInfo(name = "userId") var userId: Long,
     @ColumnInfo(name = "name") var name: String,
-    @ColumnInfo(name = "description") var description: String) {
-}
+    @ColumnInfo(name = "description") var description: String) {}

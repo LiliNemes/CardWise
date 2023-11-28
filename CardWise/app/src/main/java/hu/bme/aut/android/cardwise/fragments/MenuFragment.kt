@@ -1,4 +1,4 @@
-package hu.bme.aut.android.cardwise
+package hu.bme.aut.android.cardwise.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import hu.bme.aut.android.cardwise.CheckActivity
+import hu.bme.aut.android.cardwise.R
+import hu.bme.aut.android.cardwise.UserDataRepositoryProvider
 import hu.bme.aut.android.cardwise.data.UserDataRepository
 import hu.bme.aut.android.cardwise.databinding.FragmentMenuBinding
 import kotlin.concurrent.thread
@@ -31,6 +34,9 @@ class MenuFragment : Fragment() {
         return binding.root;
     }
 
+    /**
+     * Sets event listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,7 +46,7 @@ class MenuFragment : Fragment() {
         binding.btnstats.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_statsFragment2)
         }
-        binding.btnCheckLast.setOnClickListener {
+        /*binding.btnCheckLast.setOnClickListener {
             thread {
                 val intent = Intent(requireContext(), CheckActivity::class.java)
                 val lastDeck = userDataRepository.getLastDeckUsed()
@@ -52,7 +58,7 @@ class MenuFragment : Fragment() {
                     }
                 }
             }
-        }
+        }*/
 
     }
 }

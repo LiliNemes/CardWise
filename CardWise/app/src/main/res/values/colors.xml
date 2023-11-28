@@ -4,4 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darker_grey">#a6aa9c</color>
     <color name="lighter_grey">#f5efe3</color>
+    <color name="lightest_brown">#F9E0BB</color>
+    <color name="yellow">#FFC26F</color>
+    <color name="medium_brown">#C38154</color>
+    <color name="dark_brown">#884A39</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 </resources>

@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 import java.util.Calendar
 import java.util.Date
 
-class DatePickerDialogFragment(private val listener: DatePickerDialogListener) :  DialogFragment(),
+class DatePickerDialogFragment :  DialogFragment(),
         DatePickerDialog.OnDateSetListener {
     interface DatePickerDialogListener {
         fun onDatePicked(date: Date)
@@ -28,6 +28,5 @@ class DatePickerDialogFragment(private val listener: DatePickerDialogListener) :
         cal[Calendar.YEAR] = year
         cal[Calendar.MONTH] = month
         cal[Calendar.DAY_OF_MONTH] = day
-        listener.onDatePicked(cal.time)
     }
 }

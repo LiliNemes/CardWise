@@ -1,6 +1,7 @@
 package hu.bme.aut.android.cardwise.fragments
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater

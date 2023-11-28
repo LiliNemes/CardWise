@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightest_brown"
     tools:context=".StudyActivity">
 
     <LinearLayout
@@ -19,13 +20,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorSecondary">
+                android:background="@color/medium_brown">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/toolbar_title"
-                    android:textColor="?attr/colorOnSecondary"
+                    android:textColor="@color/dark_brown"
                     android:gravity="center_vertical"
                     android:textSize="20sp"
                     android:text="Single deck" />
@@ -45,7 +46,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="#c6cfdd"
+                android:background="@color/yellow"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -114,7 +115,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="#a6aa9c"
+                android:background="@color/yellow"
                 android:padding="20sp"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="20dp"
@@ -228,6 +229,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/dark_brown"
                 android:text="Done" />
 
             <TextView
@@ -242,6 +244,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/dark_brown"
                 android:text="I don't know" />
 
         </LinearLayout>
@@ -260,6 +263,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/dark_brown"
                 android:text="Next Question" />
 
             <TextView
@@ -274,6 +278,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/dark_brown"
                 android:text="Leave" />
 
         </LinearLayout>

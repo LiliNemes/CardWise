@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import hu.bme.aut.android.cardwise.data.AppDatabase
 import hu.bme.aut.android.cardwise.data.User
-import hu.bme.aut.android.cardwise.data.UserDao
 import hu.bme.aut.android.cardwise.databinding.ActivityLoginBinding
 import hu.bme.aut.android.cardwise.fragments.NewDeckDialogFragment
 import hu.bme.aut.android.cardwise.fragments.NewUserDialogFragment
@@ -17,6 +16,9 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
     private lateinit var binding: ActivityLoginBinding
     private lateinit var database: AppDatabase
 
+    /**
+     * Gets the database, event managers of the buttons login and register.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,11 +36,14 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
             this.supportFragmentManager,
             NewDeckDialogFragment.TAG)
         }
-
-        binding.etUsername.text.append("Hans")
-        binding.etPassword.text.append("Hans")
     }
 
+    /**
+     * newUserDialogFragment event listener implementation. If the user(name) already exists
+     * it alerts the user and doesn't add it to the database again. If not, it adds
+     * the new user to the database and instantly navigates to the main activity of
+     * the new user (so it should be empty).
+     */
     override fun onUserCreated(newUser: User) {
 
         thread {
@@ -52,7 +57,7 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
                 }
             }
             else {
-                var userId = database.UserDao().insert(newUser)
+                val userId = database.UserDao().insert(newUser)
                 runOnUiThread {
                     navigateToUserMain(userId)
                 }
@@ -60,6 +65,11 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
         }
     }
 
+    /**
+     * Checks if the user's login data is correct. Firstly, whether the user exists,
+     * secondly, whether the given password matches the username's password. If both are
+     * correct, we navigate to the user's main activity page.
+     */
     private fun CheckLogin(userName: String, password: String) {
         thread {
 
@@ -91,6 +101,10 @@ class LoginActivity: AppCompatActivity(), NewUserDialogFragment.NewUserDialogLis
         }
     }
 
+    /**
+     * Calls the main activity, with the added information userId, as the main activity
+     * should be different for each user.
+     */
     private fun navigateToUserMain(userId: Long) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(MainActivity.USER_ID_TAG, userId)

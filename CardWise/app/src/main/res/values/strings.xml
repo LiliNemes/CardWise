@@ -5,8 +5,6 @@
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="please_enter_your_username_and_password">Please enter your username and password</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="my_decks">My Decks</string>
     <string name="my_stats">My Stats</string>
@@ -30,5 +28,9 @@
     <string name="new_card_title">New Card</string>
     <string name="edit_card_title">Edit Card</string>
     <string name="title_activity_study">StudyActivity</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="streak_0">Streak: 0</string>
 
 </resources>
